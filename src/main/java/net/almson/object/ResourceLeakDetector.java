@@ -93,6 +93,16 @@ public class ResourceLeakDetector {
         }
     }
 
+      public static ResourceLeakDetector
+    newDisabledResourceLeakDetector() {
+            return new ResourceLeakDetector(Level.DISABLED, -1, -1);
+        }
+
+      public static ResourceLeakDetector
+    newResourceLeakDetector(Level level, int samplingInterval, int traceCount) {
+            return new ResourceLeakDetector(level, samplingInterval, traceCount);
+        }
+
       static ResourceLeakDetector
     newResourceLeakDetector() {
         

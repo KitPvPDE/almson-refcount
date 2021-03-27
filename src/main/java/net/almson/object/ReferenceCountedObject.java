@@ -77,18 +77,30 @@ abstract class ReferenceCountedObject implements AutoCloseable {
       protected
     ReferenceCountedObject (boolean idempotentClose) {
         
-            this.idempotentClose = idempotentClose;
+            this(idempotentClose, LEAK_DETECTOR);
         }
-      
+
+      protected
+    ReferenceCountedObject (ResourceLeakDetector resourceLeakDetector) {
+
+          this(false, resourceLeakDetector);
+        }
+
+      protected
+    ReferenceCountedObject (boolean idempotentClose, ResourceLeakDetector resourceLeakDetector) {
+
+            this.idempotentClose = idempotentClose;
+            this.resourceReference = resourceLeakDetector.tryRegister(this);
+        }
     
       private volatile long 
     referenceCount = 1;
       
       private final boolean
     idempotentClose;
-    
-      private final ResourceReference 
-    resourceReference = LEAK_DETECTOR.tryRegister (this);
+
+      private final ResourceReference
+    resourceReference;
       
       
       /**
